@@ -1,7 +1,6 @@
 package servlet;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,19 +9,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dao.Booksdao;
-import dto.Rbook;
 /**
- * Servlet implementation class Booklist
+ * Servlet implementation class Registerbooks
  */
-@WebServlet("/Booklist")
-public class Booklist extends HttpServlet {
+@WebServlet("/Registerbooks")
+public class Registerbooks extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Booklist() {
+    public Registerbooks() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,15 +28,11 @@ public class Booklist extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		  List<Rbook> books = Booksdao.getAllBooks();
-	        request.setAttribute("books", books);
-				request.setAttribute("list",books);
-				String view="/WEB-INF/view/booklist.jsp";
-				RequestDispatcher dispatcher =request.getRequestDispatcher(view);
-				dispatcher.forward(request, response);
-				
-	
-}
+		String view = "WEB-INF/view/registerbooks.jsp";
+		RequestDispatcher dispatcher = request.getRequestDispatcher(view);
+		dispatcher.forward(request, response);
+	}
+
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */

@@ -3,19 +3,19 @@ package dto;
 public class Rbook {
 	private String title;
 	private String author;
-	private String isbn;
 	private String publisher;
+	private String isbn;
 	private double rating;
-	private String st;
+	private String status;
 	
-	public Rbook(String title,String author,String isbn,String publisher,double rating,String st) {
+	public Rbook(String title,String author,String publisher,String isbn,double rating,String status) {
 		super();
 		this.title=title;
 		this.author=author;
-		this.isbn=isbn;
 		this.publisher=publisher;
+		this.isbn=isbn;
 		this.rating=rating;
-		this.st=st;
+		this.status=status;
 	}
 
 	public String getTitle() {
@@ -58,12 +58,12 @@ public class Rbook {
 		this.rating = rating;
 	}
 
-	public String getSt() {
-		return st;
+	public String getStarus() {
+		return status;
 	}
 
-	public void setSt(String st) {
-		this.st = st;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 }

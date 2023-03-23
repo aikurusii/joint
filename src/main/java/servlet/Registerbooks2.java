@@ -1,7 +1,6 @@
 package servlet;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,37 +8,44 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import dao.Booksdao;
-import dto.Rbook;
+import dto.Book;
 /**
- * Servlet implementation class Booklist
+ * Servlet implementation class Registerbooks2
  */
-@WebServlet("/Booklist")
-public class Booklist extends HttpServlet {
+@WebServlet("/Registerbooks2")
+public class Registerbooks2 extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Booklist() {
+    public Registerbooks2() {
         super();
         // TODO Auto-generated constructor stub
     }
-
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		  List<Rbook> books = Booksdao.getAllBooks();
-	        request.setAttribute("books", books);
-				request.setAttribute("list",books);
-				String view="/WEB-INF/view/booklist.jsp";
-				RequestDispatcher dispatcher =request.getRequestDispatcher(view);
-				dispatcher.forward(request, response);
-				
-	
-}
+		request.setCharacterEncoding("UTF-8");
+		String title=request.getParameter("title");
+		String author=request.getParameter("author");
+		String publisher=request.getParameter("publisher");
+		String isbn=request.getParameter("isbn");
+		String type=request.getParameter("type");
+		
+		Book si=new Book(-1,title,author,publisher,isbn,type);
+		HttpSession session=request.getSession();
+		session.setAttribute("input_data", si);
+		
+		String view = "WEB-INF/view/registerbooks2.jsp";
+		RequestDispatcher dispatcher = request.getRequestDispatcher(view);
+		dispatcher.forward(request, response);	
+		
+	}
+
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */

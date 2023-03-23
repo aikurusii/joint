@@ -12,17 +12,18 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.Booksdao;
 import dto.Rbook;
+
 /**
- * Servlet implementation class Booklist
+ * Servlet implementation class Serch
  */
-@WebServlet("/Booklist")
-public class Booklist extends HttpServlet {
+@WebServlet("/Serch")
+public class Serch extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Booklist() {
+    public Serch() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,15 +32,16 @@ public class Booklist extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		  List<Rbook> books = Booksdao.getAllBooks();
-	        request.setAttribute("books", books);
-				request.setAttribute("list",books);
-				String view="/WEB-INF/view/booklist.jsp";
-				RequestDispatcher dispatcher =request.getRequestDispatcher(view);
-				dispatcher.forward(request, response);
-				
-	
-}
+		request.setCharacterEncoding("UTF-8");
+		String keyword = request.getParameter("keyword");
+		List<Rbook>booklist=Booksdao.searchBooks(keyword);
+		request.setAttribute("list", booklist);
+		String view="/WEB-INF/view/serch.jsp";
+		RequestDispatcher dispatcher =request.getRequestDispatcher(view);
+		dispatcher.forward(request, response);
+
+	}
+
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */

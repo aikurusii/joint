@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@ page import ="dto.Rbook" %>
-    <%@ page import="java.util.List" %>
-    <%@ page import="java.util.ArrayList" %>
+        <%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="dto.Rbook" %>
+    
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>検索結果</title>
 </head>
 <body>
 	<form action="Serch"method="post">
@@ -16,7 +17,7 @@
   <button class="btn btn-outline-success" type="submit" id="button-addon2" ><i class="fas fa-search"></i> 検索</button>
 </div>
 </form>
-<h1>図書一覧</h1>
+	<h1>図書一覧</h1>
 <table class=1>
 	<tr>
 	<th>図書名</th>
