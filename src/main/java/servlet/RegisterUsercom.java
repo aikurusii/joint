@@ -31,9 +31,10 @@ public class RegisterUsercom extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session=request.getSession();
+		HttpSession session = request.getSession();
 		User account=(User)session.getAttribute("input_data");
 		int result=Userdao.registerAccount(account);
+		
 		String path = "";
 		if(result == 1) {
 			
@@ -42,7 +43,7 @@ public class RegisterUsercom extends HttpServlet {
 			path = "WEB-INF/view/RegisterUsercom.jsp";
 		} else {
 		
-			path = "WEB-INF/view/RegisterUser-Form.jsp.jsp?error=1";
+			path = "WEB-INF/view/RegisterUser-Form.jsp?error=1";
 		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher(path);
 		dispatcher.forward(request, response);

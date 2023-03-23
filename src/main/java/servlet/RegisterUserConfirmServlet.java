@@ -31,18 +31,16 @@ public class RegisterUserConfirmServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-request.setCharacterEncoding("UTF-8");
+		request.setCharacterEncoding("UTF-8");
+		String name=request.getParameter("name");
+		String mail=request.getParameter("mail");
+		String pw=request.getParameter("pw");
 		
-		String name = request.getParameter("name");
-		String mail = request.getParameter("mail");
-		String pw = request.getParameter("pw");
+		User account =new User(-1,name,mail,null,pw,null);
+		HttpSession session=request.getSession();
+		session.setAttribute("input_data", account);
 		
-		User user = new User(-1,name,mail,null,pw);
-		
-		HttpSession session = request.getSession();
-		session.setAttribute("input_data",user);
-		
-		String view = "WEB-INF/view/RegisterUser-Confirm";
+		String view = "WEB-INF/view/RegisterUser-Confirm.jsp";
 		RequestDispatcher dispatcher = request.getRequestDispatcher(view);
 		dispatcher.forward(request, response);
 		

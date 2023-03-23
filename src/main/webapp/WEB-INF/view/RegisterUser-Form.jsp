@@ -18,8 +18,8 @@
 	<h1>新規登録</h1>
 	<form action="RegisterUserConfirmServlet" method="post">
 		　ユーザー名　　<input type="text" name="name" value="<%=account.getName()%>"><br>
-		メールアドレス　<input type="email" name="email"><br>
-		　　　PW　　　　<input type="password" name="pw" value="<%=account.getMail()%>"><br>
+		メールアドレス　<input type="email" name="mail" value="<%=account.getMail()%>"><br>
+		　　　PW　　　　<input type="password" name="pw" ><br>
 		<input type="submit" value="次へ">
 		</form>
 		<a href="./">戻る</a>
@@ -27,11 +27,12 @@
 		<h1>新規登録</h1>
 	<form action="RegisterUserConfirmServlet" method="post">
 		　ユーザー名　　<input type="text" name="name"><br>
-		メールアドレス　<input type="email" name="email"><br>
+		メールアドレス　<input type="email" name="mail"><br>
 		　　　PW　　　　<input type="password" name="pw"><br>
 		<input type="submit" value="次へ">
 		</form>
 		<a href="./">戻る</a>
+		<a href="index.jsp">戻る</a>
 		<%} %>
 </body>
 </html>

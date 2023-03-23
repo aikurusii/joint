@@ -10,9 +10,11 @@
 <body>
 	<h1>新規登録</h1>
 	<p>下記の内容を登録します。</p>
-	<% User account=(User)session.getAttribute("input_data"); %>
-	　ユーザー名　　<%=account.getName() %>
-	メールアドレス　<%=account.getMail() %>
+	<%
+		User account=(User)session.getAttribute("input_data");
+	%>
+	　ユーザー名　　<%=account.getName() %><br>
+	メールアドレス　<%=account.getMail() %><br>
 	　　　PW　　　　********<br>
 	<a href="RegisterUsercom">登録</a>
 	<a href="index.html">戻る</a>
