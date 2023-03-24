@@ -31,10 +31,15 @@ public class Userdao {
 	}
 	
 	public static int registerAccount(User account) {
-		String sql = "INSERT INTO user VALUES(default, ?, ?, ?, ?)";
+		String sql = "INSERT INTO users VALUES(default, ?, ?, ?, ?, current_timestamp)";
 		int result = 0;
-		String salt = GenerateSalt.getSalt(32);
+		
+		// ランダムなソルトの取得(今回は32桁で実装)
+		String salt = GenerateSalt.getSalt(64);
+		
+		// 取得したソルトを使って平文PWをハッシュ
 		String hashedPw = GenerateHashedPw.getSafetyPassword(account.getPassword(), salt);
+		
 		try (
 				Connection con = getConnection();
 				PreparedStatement pstmt = con.prepareStatement(sql);
@@ -43,6 +48,7 @@ public class Userdao {
 			pstmt.setString(2, account.getMail());
 			pstmt.setString(3, salt);
 			pstmt.setString(4, hashedPw);
+
 			result = pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -52,10 +58,11 @@ public class Userdao {
 			System.out.println(result + "件更新しました。");
 		}
 		return result;
-		}
-
+	}
+	
+	// メールアドレスを元にソルトを取得
 	public static String getSalt(String mail) {
-		String sql = "SELECT salt FROM shop WHERE mail = ?";
+		String sql = "SELECT salt FROM users WHERE mail = ?";
 		
 		try (
 				Connection con = getConnection();
@@ -79,7 +86,7 @@ public class Userdao {
 	}
 	
 	public static User login(String mail, String hashedPw) {
-		String sql = "SELECT * FROM uhop WHERE mail = ? AND password = ?";
+		String sql = "SELECT * FROM users WHERE mail = ? AND password = ?";
 		
 		try (
 				Connection con = getConnection();
@@ -96,7 +103,7 @@ public class Userdao {
 					String salt = rs.getString("salt");
 					
 					
-					return new User(id, name, mail, salt, null);
+					return new User(id, name, mail , salt,null,null);
 				}
 			}
 		} catch (SQLException e) {
@@ -108,7 +115,7 @@ public class Userdao {
 }
 	
 	public static User manage(String mail, String hashedPw) {
-		String sql = "SELECT * FROM manage WHERE mail = ? AND password = ?";
+String sql = "SELECT * FROM kanri WHERE mail = ? AND password = ?";
 		
 		try (
 				Connection con = getConnection();
@@ -125,7 +132,7 @@ public class Userdao {
 					String salt = rs.getString("salt");
 					
 					
-					return new User(id, name, mail, salt, null);
+					return new User(id, name, mail , salt,null,null);
 				}
 			}
 		} catch (SQLException e) {
@@ -137,7 +144,7 @@ public class Userdao {
 }
 	public static List<User> selectallUser(){
 		List<User> result=new ArrayList<>();
-		String sql="select*from user";
+		String sql="select*from users";
 		try(
 				Connection con = getConnection();
 				PreparedStatement pstmt = con.prepareStatement(sql);
@@ -147,7 +154,7 @@ public class Userdao {
 					int id = rs.getInt("id");
 					String name = rs.getString("name");
 					String mail = rs.getString("mail");
-		User user=new User(id,name,mail,null,null);
+		User user=new User(id,name,mail,null,null,null);
 		result.add(user);
 				}
 			}

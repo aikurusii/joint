@@ -10,19 +10,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import dao.Userdao;
-import dto.User;
+import dao.Booksdao;
+import dto.Book;
+
 /**
- * Servlet implementation class RegisterUsercom
+ * Servlet implementation class Registerbooks3
  */
-@WebServlet("/RegisterUsercom")
-public class RegisterUsercom extends HttpServlet {
+@WebServlet("/Registerbooks3")
+public class Registerbooks3 extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public RegisterUsercom() {
+    public Registerbooks3() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,22 +33,19 @@ public class RegisterUsercom extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		User account=(User)session.getAttribute("input_data");
-		int result=Userdao.registerAccount(account);
+		Book si=(Book)session.getAttribute("input_data");
+		int result=Booksdao.registerBook(si);
 		
-		String path = "";
-		if(result == 1) {
-			
+		String path="";
+		if(result==1) {
 			session.removeAttribute("input_data");
-			
-			path = "WEB-INF/view/RegisterUsercom.jsp";
+			path="WEB-INF/view/registerbooks3.jsp";
 		} else {
-		
-			path = "WEB-INF/view/RegisterUser-Form.jsp?error=1";
+			path="WEB-INF/view/registerbooks.jsp?error=1";
 		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher(path);
 		dispatcher.forward(request, response);
-		}
+}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

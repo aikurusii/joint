@@ -48,7 +48,7 @@ public class Log extends HttpServlet {
 		
 		if(manage!=null) {
 			HttpSession session = request.getSession();
-			session.setAttribute("user", account);
+			session.setAttribute("user", manage);
 			String view = "WEB-INF/view/managetop.jsp";
 			RequestDispatcher dispatcher = request.getRequestDispatcher(view);
 			dispatcher.forward(request, response);

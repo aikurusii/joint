@@ -10,44 +10,41 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import dao.Userdao;
-import dto.User;
+import dto.Book;
 /**
- * Servlet implementation class RegisterUsercom
+ * Servlet implementation class Registerbooks2
  */
-@WebServlet("/RegisterUsercom")
-public class RegisterUsercom extends HttpServlet {
+@WebServlet("/Registerbooks2")
+public class Registerbooks2 extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public RegisterUsercom() {
+    public Registerbooks2() {
         super();
         // TODO Auto-generated constructor stub
     }
-
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		User account=(User)session.getAttribute("input_data");
-		int result=Userdao.registerAccount(account);
+		request.setCharacterEncoding("UTF-8");
+		String title=request.getParameter("title");
+		String author=request.getParameter("author");
+		String publisher=request.getParameter("publisher");
+		String isbn=request.getParameter("isbn");
+		String type=request.getParameter("type");
 		
-		String path = "";
-		if(result == 1) {
-			
-			session.removeAttribute("input_data");
-			
-			path = "WEB-INF/view/RegisterUsercom.jsp";
-		} else {
+		Book si=new Book(-1,title,author,publisher,isbn,type);
+		HttpSession session=request.getSession();
+		session.setAttribute("input_data", si);
 		
-			path = "WEB-INF/view/RegisterUser-Form.jsp?error=1";
-		}
-		RequestDispatcher dispatcher = request.getRequestDispatcher(path);
-		dispatcher.forward(request, response);
-		}
+		String view = "WEB-INF/view/registerbooks2.jsp";
+		RequestDispatcher dispatcher = request.getRequestDispatcher(view);
+		dispatcher.forward(request, response);	
+		
+	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
