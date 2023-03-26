@@ -1,6 +1,8 @@
 package servlet;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -39,6 +41,21 @@ public class Registerbooks3 extends HttpServlet {
 		String path="";
 		if(result==1) {
 			session.removeAttribute("input_data");
+			int type=si.getType();
+			if(type==1) {
+				
+					try {
+						Booksdao.updateBooktype();
+					} catch (SQLException e) {
+						// TODO 自動生成された catch ブロック
+						e.printStackTrace();
+					} catch (URISyntaxException e) {
+						// TODO 自動生成された catch ブロック
+						e.printStackTrace();
+					}
+					System.out.println("1年後");
+				
+			}
 			path="WEB-INF/view/registerbooks3.jsp";
 		} else {
 			path="WEB-INF/view/registerbooks.jsp?error=1";

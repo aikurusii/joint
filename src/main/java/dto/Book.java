@@ -6,9 +6,9 @@ public class Book {
 	private String author;
 	private String isbn;
 	private String publisher;
-	private String type;
+	private int type;
 	
-	public Book(int id,String title,String author,String isbn,String publisher,String type) {
+	public Book(int id,String title,String author,String isbn,String publisher,int type) {
 		super();
 		this.id=id;
 		this.title=title;
@@ -58,11 +58,11 @@ public class Book {
 		this.publisher = publisher;
 	}
 
-	public String getType() {
+	public int getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(int type) {
 		this.type = type;
 	}
 	

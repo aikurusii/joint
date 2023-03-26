@@ -1,5 +1,6 @@
 package dao;
 
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.Connection;
@@ -8,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,7 +78,7 @@ public class Booksdao {
 			pstmt.setString(2, book.getAuthor());
 			pstmt.setString(3, book.getIsbn());
 			pstmt.setString(4, book.getPublisher());
-			pstmt.setString(5, book.getType());
+			pstmt.setInt(5, book.getType());
 			result=pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -120,6 +123,16 @@ public class Booksdao {
 	}
         return result;
     }
+	
+	  public static void updateBooktype() throws SQLException, URISyntaxException {
+		  String sql = "UPDATE books SET type = '0' WHERE type = '1' AND update_date < ?";
+	        LocalDateTime oneYearAgo = LocalDateTime.now().minusYears(1);
+	        Timestamp timestamp = Timestamp.valueOf(oneYearAgo);
+	        try (	Connection con = getConnection();
+	        		PreparedStatement stmt = con.prepareStatement(sql)) {
+	            stmt.setTimestamp(1, timestamp);
+	            stmt.executeUpdate();
+	        }
+	    }
 }
-
 	
