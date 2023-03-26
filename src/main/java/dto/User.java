@@ -6,17 +6,15 @@ public class User {
 	private String name;
 	private String salt;
 	private String password;
-	private String hashedPassword;
 
 	
-	public User(int id,String name,String mail,String salt,String password,String hashedPassword) {
+	public User(int id,String name,String mail,String salt,String password) {
 		super();
 		this.id=id;
 		this.name=name;
 		this.mail=mail;
 		this.salt=salt;
 		this.password=password;
-		this.hashedPassword=hashedPassword;
 	}
 
 	public int getId() {
@@ -59,12 +57,5 @@ public class User {
 		this.password = password;
 	}
 
-	public String getHashedPassword() {
-		return hashedPassword;
-	}
 
-	public void setHashedPassword(String hashedPassword) {
-		this.hashedPassword = hashedPassword;
-	}
-	
 }

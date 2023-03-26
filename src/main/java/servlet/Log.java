@@ -35,38 +35,43 @@ public class Log extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String mail=request.getParameter("mail");
 		String pw=request.getParameter("pw");
-		String salt=Userdao.getSalt(mail);
-		if(salt == null) {
-			String view = "./?error=1";
-			RequestDispatcher dispatcher = request.getRequestDispatcher(view);
-			dispatcher.forward(request, response);
-			return;
-		}
-		String hashedPw = GenerateHashedPw.getSafetyPassword(pw, salt);
-		User account = Userdao.login(mail, hashedPw);
-		User manage =Userdao.manage(mail, hashedPw);
-		
-		if(manage!=null) {
-			HttpSession session = request.getSession();
-			session.setAttribute("user", manage);
-			String view = "WEB-INF/view/managetop.jsp";
-			RequestDispatcher dispatcher = request.getRequestDispatcher(view);
-			dispatcher.forward(request, response);
+		if(Userdao.AccsessAdmin(mail) != null) {
+			String msalt =Userdao.getSaltAdmin(mail);
+			String hashedPwm = GenerateHashedPw.getSafetyPassword(pw, msalt);
+			User manage =Userdao.loginAdmin(mail, hashedPwm);
+			
+			if(manage!=null) {
+				System.out.println(1);
+				HttpSession session = request.getSession();
+				session.setAttribute("user", manage);
+				String view = "WEB-INF/view/managetop.jsp";
+				RequestDispatcher dispatcher = request.getRequestDispatcher(view);
+				dispatcher.forward(request, response);
+			}
+		}else if(Userdao.AccsessUser(mail) != null){
+			String salt=Userdao.getSaltUser(mail);
+			String hashedPw = GenerateHashedPw.getSafetyPassword(pw, salt);
+			User account = Userdao.loginUser(mail, hashedPw);
+			
+			if(account==null) {
+				System.out.println(2);
+				String view = "WEB-INF/view/login.jsp?error=1";
+				RequestDispatcher dispatcher = request.getRequestDispatcher(view);
+				dispatcher.forward(request, response);
+			}else {
+				HttpSession session = request.getSession();
+				session.setAttribute("user", account);
+			
+				String view = "WEB-INF/view/top.jsp";
+				RequestDispatcher dispatcher = request.getRequestDispatcher(view);
+				dispatcher.forward(request, response);
+			}
 		}else {
-		
-		if(account==null) {
-			String view = "./?error=1";
-			RequestDispatcher dispatcher = request.getRequestDispatcher(view);
-			dispatcher.forward(request, response);
-		}else {
-			HttpSession session = request.getSession();
-			session.setAttribute("user", account);
-		
-			String view = "WEB-INF/view/top.jsp";
+			String view = "WEB-INF/view/login.jsp?error=1";
 			RequestDispatcher dispatcher = request.getRequestDispatcher(view);
 			dispatcher.forward(request, response);
 		}
-	}
+		
 	}
 
 	/**

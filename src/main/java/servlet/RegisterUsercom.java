@@ -33,7 +33,7 @@ public class RegisterUsercom extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		User account=(User)session.getAttribute("input_data");
-		int result=Userdao.registerAccount(account);
+		int result=Userdao.registerAdmin(account);
 		
 		String path = "";
 		if(result == 1) {
