@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -31,15 +32,19 @@ public class Booklist extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		  List<Rbook> books = Booksdao.getAllBooks();
-	        request.setAttribute("books", books);
-				request.setAttribute("list",books);
-				String view="/WEB-INF/view/booklist.jsp";
-				RequestDispatcher dispatcher =request.getRequestDispatcher(view);
-				dispatcher.forward(request, response);
-				
-	
-}
+		  try {
+	          
+	            List<Rbook> books = Booksdao.getAllBookss();
+	            request.setAttribute("books", books);
+	            String view = "WEB-INF/view/booklist.jsp";
+	    		RequestDispatcher dispatcher = request.getRequestDispatcher(view);
+	    		dispatcher.forward(request, response);
+	    	
+	        } catch (SQLException e) {
+	            throw new ServletException(e);
+	        }
+		
+	    }
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */

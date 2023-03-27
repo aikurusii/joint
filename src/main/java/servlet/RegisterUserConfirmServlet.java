@@ -36,7 +36,7 @@ public class RegisterUserConfirmServlet extends HttpServlet {
 		String mail=request.getParameter("mail");
 		String pw=request.getParameter("pw");
 		
-		User account =new User(-1,name,mail,null,pw,null);
+		User account =new User(-1,name,mail,null,pw);
 		HttpSession session=request.getSession();
 		session.setAttribute("input_data", account);
 		

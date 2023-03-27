@@ -34,9 +34,9 @@ public class Registerbooks2 extends HttpServlet {
 		String author=request.getParameter("author");
 		String publisher=request.getParameter("publisher");
 		String isbn=request.getParameter("isbn");
-		String type=request.getParameter("type");
+		int type=Integer.parseInt(request.getParameter("type"));
 		
-		Book si=new Book(-1,title,author,publisher,isbn,type);
+		Book si=new Book(-1,title,author,isbn,publisher,type);
 		HttpSession session=request.getSession();
 		session.setAttribute("input_data", si);
 		

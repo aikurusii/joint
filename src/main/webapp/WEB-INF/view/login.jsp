@@ -7,11 +7,11 @@
 <title>ログイン画面</title>
 </head>
 <body>
+	<h1>ログイン画面</h1>
 	<%
 		request.setCharacterEncoding("UTF-8");
 		if(request.getParameter("error") != null){	
 	%>
-	<h1>ログイン画面</h1>
 		<p style="color:bule">ログイン失敗</p>
 	<form action="Log" method="post">
 		メールアドレス<input type="text" name="mail" value="<%=request.getParameter("mail") %>"><br>

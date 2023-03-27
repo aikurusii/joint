@@ -1,5 +1,6 @@
 package dao;
 
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.Connection;
@@ -7,7 +8,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,38 +34,6 @@ public class Booksdao {
 	}
 	
 	
-	
-	public static List<Rbook> getAllBooks() {
-        List<Rbook> books = new ArrayList<>();
-        String sql = "SELECT books.title, books.author, books.publisher, books.isbn, " +
-                "AVG(rat.rating) AS rating, " +
-                "CASE WHEN loan.id IS NOT NULL THEN '〇' ELSE '×' END AS is_available " +
-                "FROM books " +
-                "LEFT JOIN rat ON books.id = rat.book_id " +
-                "LEFT JOIN loan ON books.id = loan.book_id " +
-                "GROUP BY books.isbn, loan.id " +
-                "ORDER BY books.isbn";
-        try {
-            Connection con = getConnection();
-            ResultSet rs = ((Statement) con).executeQuery(sql);
-            while (rs.next()) {
-                String title=rs.getString("title");
-                String author=rs.getString("author");
-                String publisher=rs.getString("publisher");
-                String isbn=rs.getString("isbn");
-                double setRating=rs.getFloat("rating");
-                String Status=rs.getString("status");
-                Rbook book = new Rbook(title, author, publisher, isbn, setRating, Status);
-                books.add(book);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
-			e.printStackTrace();
-        }
-        return books;
-    }
-	
 	public static int registerBook(Book book) {
 		String sql = "INSERT INTO books VALUES(default, ?, ?, ?, ?, ? )";
 		int result = 0;
@@ -75,7 +45,7 @@ public class Booksdao {
 			pstmt.setString(2, book.getAuthor());
 			pstmt.setString(3, book.getIsbn());
 			pstmt.setString(4, book.getPublisher());
-			pstmt.setString(5, book.getType());
+			pstmt.setInt(5, book.getType());
 			result=pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -88,38 +58,82 @@ public class Booksdao {
 	
 		}
 	
-	public static List<Rbook> searchBooks(String keyword){
-		List<Rbook> result = new ArrayList<>();
-	    String sql = "SELECT books.title, books.author, books.isbn, books.publisher, AVG(rat.rating) AS avg_rating, CASE WHEN loan.book_id IS NOT NULL THEN '〇' ELSE '×' END AS is_loaned "
-	        + "FROM books "
-	        + "LEFT JOIN rat ON books.id = rat.book_id "
-	        + "LEFT JOIN loan ON books.id = loan.book_id AND loan.returned_at IS NULL "
-	        + "WHERE books.title LIKE ? OR books.author LIKE ? OR books.isbn LIKE ? OR books.publisher LIKE ? "
-	        + "GROUP BY books.id, books.title, books.author, books.isbn, books.publisher, loan.book_id, rat.rating";
-	    try (	Connection con = getConnection();
-	    		PreparedStatement stmt = con.prepareStatement(sql)) {
-	      stmt.setString(1, "%" + keyword + "%");
-	      stmt.setString(2, "%" + keyword + "%");
-	      stmt.setString(3, "%" + keyword + "%");
-	      stmt.setString(4, "%" + keyword + "%");
-	      ResultSet rs = stmt.executeQuery();
-	      while (rs.next()) {
-	    	  String title=rs.getString("title");
-              String author=rs.getString("author");
-              String publisher=rs.getString("publisher");
-              String isbn=rs.getString("isbn");
-              double setRating=rs.getFloat("rating");
-              String Status=rs.getString("status");
-              Rbook book = new Rbook(title, author, publisher, isbn, setRating, Status);
-              result.add(book);
+	
+	  public static void updateBooktype() throws SQLException, URISyntaxException {
+		  String sql = "UPDATE books SET type = '0' WHERE type = '1' AND update_date < ?";
+	        LocalDateTime oneYearAgo = LocalDateTime.now().minusYears(1);
+	        Timestamp timestamp = Timestamp.valueOf(oneYearAgo);
+	        try (	Connection con = getConnection();
+	        		PreparedStatement stmt = con.prepareStatement(sql)) {
+	            stmt.setTimestamp(1, timestamp);
+	            stmt.executeUpdate();
+	        }
 	    }
-	} catch (SQLException e) {
-		e.printStackTrace();
-	} catch (URISyntaxException e) {
-		e.printStackTrace();
-	}
-        return result;
-    }
-}
+	  
 
+	    public static List<Rbook> getAllBookss() throws SQLException {
+	        List<Rbook> bookList = new ArrayList<>();
+	        String sql ="SELECT books.title, books.author, books.publisher, books.isbn, AVG(rat.rating) as rating, loan.id as loan_id "
+                    + "FROM books "
+                    + "LEFT JOIN rat ON books.id = rat.book_id "
+                    + "LEFT JOIN loan ON books.id = loan.book_id AND loan.returned_at IS NULL "
+                    + "GROUP BY books.title, books.author, books.publisher, books.isbn, loan.id "
+                    + "ORDER BY books.isbn";
+
+	        try (	Connection con = getConnection();
+	        		PreparedStatement statement = con.prepareStatement(sql)) {
+	            try (ResultSet resultSet = statement.executeQuery()) {
+	                while (resultSet.next()) {
+	                    String isbn = resultSet.getString("isbn");
+	                    String title = resultSet.getString("title");
+	                    String author = resultSet.getString("author");
+	                    String publisher = resultSet.getString("publisher");
+	                    double rating = resultSet.getDouble("rating");
+	                    boolean loan_id = resultSet.getInt("loan_id")>0;
+	                    Rbook book = new Rbook(title, author, publisher,isbn, rating, loan_id);
+	                    bookList.add(book);
+	                }
+	            }
+	        } catch (URISyntaxException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
+	        return bookList;
+	    }
+	    
+	    public static List<Rbook> Searchbook(String keyword) throws SQLException {
+	        List<Rbook> bookList = new ArrayList<>();
+	            String sql = "SELECT books.title, books.author, books.publisher, books.isbn, AVG(rat.rating) as rating, loan.id as loan_id "
+	                    + "FROM books "
+	                    + "LEFT JOIN rat ON books.id = rat.book_id "
+	                    + "LEFT JOIN loan ON books.id = loan.book_id AND loan.returned_at IS NULL "
+	                    + "WHERE books.title ILIKE ? OR books.author ILIKE ? OR books.publisher ILIKE ? OR books.isbn ILIKE ? "
+	                    + "GROUP BY books.title, books.author, books.publisher, books.isbn, loan.id "
+	                    + "ORDER BY books.isbn";
+	            try (	Connection con = getConnection();
+	            		PreparedStatement stmt = con.prepareStatement(sql)) {
+	                stmt.setString(1, "%" + keyword + "%");
+	                stmt.setString(2, "%" + keyword + "%");
+	                stmt.setString(3, "%" + keyword + "%");
+	                stmt.setString(4, "%" + keyword + "%");
+	                try (ResultSet rs = stmt.executeQuery()) {
+	                    while (rs.next()) {
+	                        String title = rs.getString("title");
+	                        String author = rs.getString("author");
+	                        String publisher = rs.getString("publisher");
+	                        String isbn = rs.getString("isbn");
+	                        Double rating = rs.getDouble("rating");
+	                        boolean loan_id= rs.getInt("loan_id") > 0;
+
+	                        Rbook book = new Rbook(title, author, publisher, isbn, rating, loan_id);
+	                        bookList.add(book);
+	                    }
+	                }
+	        } catch (URISyntaxException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
+	        return bookList;
+	    }
+}
 	

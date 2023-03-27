@@ -3,6 +3,7 @@
         <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="dto.Rbook" %>
+<%@ page import="dao.Booksdao" %>
     
 <!DOCTYPE html>
 <html>
@@ -20,7 +21,7 @@
 	<h1>図書一覧</h1>
 <table class=1>
 	<tr>
-	<th>図書名</th>
+	<th>タイトル</th>
 	<th>著者名</th>
 	<th>出版社</th>
 	<th>ISBN</th>
@@ -29,17 +30,36 @@
 	</tr>
 	<%
 	List<Rbook> list =(ArrayList<Rbook>)request.getAttribute("list");
+    String cIsbn="";
 	for(Rbook r :list){
+	%>
+	<%if(r.getIsbn().equals(cIsbn)) {
+	 	continue;}
+	else{
 	%>
 	<tr>
 		<td><%=r.getTitle() %></td>
 		<td><%=r.getAuthor() %></td>
 		<td><%=r.getPublisher() %></td>
 		<td><%=r.getIsbn() %></td>
-		<td><%=r.getRating() %></td>
-		<td><%=r.getStarus() %>
-		</tr>
-		<%} %>
+		<%
+			if(r.getRating() >=0) {
+				%>
+			<td><%=r.getRating()%></td>
+			<% }else{%>
+				<td>未評価</td>
+			<%} %>
+		 <% 
+			if(r.isStatus()){
+		%>
+			<td>×</td>
+			<%}else{%>
+			<td>〇</td>
+			<%} %> 
+			<% cIsbn =r.getIsbn(); %>
+			<%} %>
+       <%} %>
+			</tr>
 </table>
 </body>
 </html>

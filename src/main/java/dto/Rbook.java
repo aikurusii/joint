@@ -6,9 +6,9 @@ public class Rbook {
 	private String publisher;
 	private String isbn;
 	private double rating;
-	private String status;
+	private boolean status;
 	
-	public Rbook(String title,String author,String publisher,String isbn,double rating,String status) {
+	public Rbook(String title,String author,String publisher,String isbn,double rating,boolean status) {
 		super();
 		this.title=title;
 		this.author=author;
@@ -58,12 +58,13 @@ public class Rbook {
 		this.rating = rating;
 	}
 
-	public String getStarus() {
+	public boolean isStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(boolean status) {
 		this.status = status;
 	}
-	
+
+
 }

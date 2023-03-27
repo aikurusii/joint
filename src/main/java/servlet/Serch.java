@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -32,13 +33,19 @@ public class Serch extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		try {
 		request.setCharacterEncoding("UTF-8");
 		String keyword = request.getParameter("keyword");
-		List<Rbook>booklist=Booksdao.searchBooks(keyword);
+		List<Rbook> booklist;
+			booklist = Booksdao.Searchbook(keyword);
 		request.setAttribute("list", booklist);
 		String view="/WEB-INF/view/serch.jsp";
 		RequestDispatcher dispatcher =request.getRequestDispatcher(view);
 		dispatcher.forward(request, response);
+		} catch (SQLException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
 
 	}
 
