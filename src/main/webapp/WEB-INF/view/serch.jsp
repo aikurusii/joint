@@ -61,5 +61,6 @@
        <%} %>
 			</tr>
 </table>
+<a href="./">戻る</a>
 </body>
 </html>
