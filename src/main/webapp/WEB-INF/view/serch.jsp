@@ -21,7 +21,7 @@
 </div>
 </form>
 	<h1>図書一覧</h1>
-<table class=1>
+<table border=1>
 	<tr>
 	<th>タイトル</th>
 	<th>著者名</th>

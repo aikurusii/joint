@@ -22,7 +22,7 @@ integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLAS
 </div>
 </form>
 <h1>図書一覧</h1>
-<table class=1>
+<table border=1>
 
 		   <tr>
             <th>タイトル</th>

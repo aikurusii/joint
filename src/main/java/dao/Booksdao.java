@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dto.Book;
+import dto.Dbook;
 import dto.Rbook;
 
 public class Booksdao {
@@ -78,7 +79,7 @@ public class Booksdao {
                     + "LEFT JOIN rat ON books.id = rat.book_id "
                     + "LEFT JOIN loan ON books.id = loan.book_id AND loan.returned_at IS NULL "
                     + "GROUP BY books.title, books.author, books.publisher, books.isbn, loan.id "
-                    + "ORDER BY books.isbn";
+                    + "ORDER BY books.isbn ";
 
 	        try (	Connection con = getConnection();
 	        		PreparedStatement statement = con.prepareStatement(sql)) {
@@ -100,6 +101,37 @@ public class Booksdao {
 			}
 	        return bookList;
 	    }
+	    
+	    public static List<Dbook> getDAllBookss() throws SQLException {
+	        List<Dbook> bookList = new ArrayList<>();
+	        String sql ="SELECT books.id, books.title, books.author, books.publisher, books.isbn, AVG(rat.rating) as rating "
+	                + "FROM books "
+	                + "LEFT JOIN rat ON books.id = rat.book_id "
+	                + "GROUP BY books.id, books.title, books.author, books.publisher, books.isbn "
+	                + "ORDER BY books.isbn ";
+
+
+	        try (	Connection con = getConnection();
+	        		PreparedStatement statement = con.prepareStatement(sql)) {
+	            try (ResultSet resultSet = statement.executeQuery()) {
+	                while (resultSet.next()) {
+	                	int id=resultSet.getInt("id");
+	                    String isbn = resultSet.getString("isbn");
+	                    String title = resultSet.getString("title");
+	                    String author = resultSet.getString("author");
+	                    String publisher = resultSet.getString("publisher");
+	                    double rating = resultSet.getDouble("rating");
+	                    Dbook book = new Dbook(id,title, author, publisher,isbn, rating);
+	                    bookList.add(book);
+	                }
+	            }
+	        } catch (URISyntaxException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
+	        return bookList;
+	    }
+	    
 	    
 	    public static List<Rbook> Searchbook(String keyword) throws SQLException {
 	        List<Rbook> bookList = new ArrayList<>();
@@ -134,6 +166,81 @@ public class Booksdao {
 				e.printStackTrace();
 			}
 	        return bookList;
+	    }
+	    
+	    public static List<Dbook> SearchDbook(String keyword) throws SQLException {
+	        List<Dbook> bookList = new ArrayList<>();
+	            String sql = "SELECT books.id, books.title, books.author, books.publisher, books.isbn, AVG(rat.rating) as rating "
+	                    + "FROM books "
+	                    + "LEFT JOIN rat ON books.id = rat.book_id "
+	                    + "WHERE books.isbn ILIKE ? "
+	                    + "GROUP BY books.id, books.title, books.author, books.publisher, books.isbn "
+	                    + "ORDER BY books.isbn";
+	            try (	Connection con = getConnection();
+	            		PreparedStatement stmt = con.prepareStatement(sql)) {
+	                stmt.setString(1, "%" + keyword + "%");
+	              
+	                try (ResultSet rs = stmt.executeQuery()) {
+	                    while (rs.next()) {
+	                    	int id=rs.getInt("id");
+	                        String title = rs.getString("title");
+	                        String author = rs.getString("author");
+	                        String publisher = rs.getString("publisher");
+	                        String isbn = rs.getString("isbn");
+	                        Double rating = rs.getDouble("rating");
+	                       
+
+	                        Dbook book = new Dbook(id, title, author, publisher, isbn, rating);
+	                        bookList.add(book);
+	                    }
+	                }
+	        } catch (URISyntaxException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
+	        return bookList;
+	    }
+	    
+	    public static List<Book> getbook(int id) throws SQLException {
+	        List<Book> result=new ArrayList<>();
+	    	String sql = "SELECT * FROM books WHERE id = ?";
+
+	        try (	Connection con = getConnection();
+	        		PreparedStatement pstmt = con.prepareStatement(sql)) {
+	            pstmt.setInt(1, id);
+	            ResultSet rs = pstmt.executeQuery();
+
+	            if (rs.next()) {
+	                String title=rs.getString("title");
+	                String author=rs.getString("author");
+	                String publisher=rs.getString("publisher");
+	                String isbn=rs.getString("isbn");
+	                int type=rs.getInt("type");
+	                Book book =new Book(id,title,author,publisher,isbn,type);
+	         result.add(book);
+	            }
+	        
+	        } catch (URISyntaxException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
+			return result;
+			    
+	}
+	    public static void deleteBook(int id) {
+	    	String sql="delete from books where id=?";
+	    	  try (	Connection con = getConnection();
+		        		PreparedStatement pstmt = con.prepareStatement(sql)) {
+	    		  pstmt.setInt(1, id);
+	    	      pstmt.executeUpdate();
+	    	    } catch (SQLException e) {
+	    	      e.printStackTrace();
+	    	   
+	    	  
+	    	  } catch (URISyntaxException e1) {
+					// TODO 自動生成された catch ブロック
+					e1.printStackTrace();
+				}
 	    }
 }
 	
