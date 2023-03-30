@@ -1,0 +1,17 @@
+@charset "UTF-8";
+html {
+	font-size: 100%;
+	
+}
+body{
+	
+}
+
+.btn{
+	font-size: 30px;
+	color: orange;
+	margin-top: 500px;
+}
+h2{
+	background-color: blue;	
+}
