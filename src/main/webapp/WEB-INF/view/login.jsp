@@ -9,6 +9,14 @@
 <title>ログイン画面</title>
 </head>
 <body>
+	
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	
+	<div class="text-center">
 	<h1>ログイン画面</h1>
 	<%
 		request.setCharacterEncoding("UTF-8");

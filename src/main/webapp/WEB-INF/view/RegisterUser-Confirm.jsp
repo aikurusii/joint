@@ -10,6 +10,14 @@
 <title>登録確認</title>
 </head>
 <body>
+	
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	
+	<div class="text-center">
 	<h1>新規登録</h1>
 	<p>下記の内容を登録します。</p>
 	<%

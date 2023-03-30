@@ -9,6 +9,14 @@
 <title>ユーザー登録</title>
 </head>
 <body>
+	
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	
+	<div class="text-center">
 	<h1>新規登録</h1>
 	<h2>登録完了しました。</h2>
 	<a href="index.html">戻る</a>

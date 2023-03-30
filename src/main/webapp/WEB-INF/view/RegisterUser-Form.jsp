@@ -10,6 +10,14 @@
 <title>登録フォーム</title>
 </head>
 <body>
+	
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	
+	<div class="text-center">
 	<%
 		request.setCharacterEncoding("UTF-8");
 		String errorCode = request.getParameter("error");
